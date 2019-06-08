@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="460.0" prefWidth="600.0" stylesheets="/css/MetroUI.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.logincraftlaunch.ui.controller.MainPageController">
+   <children>
+      <SplitMenuButton fx:id="test" layoutX="436.0" layoutY="386.0" maxHeight="60.0" maxWidth="150.0" minHeight="60.0" minWidth="150.0" mnemonicParsing="false" popupSide="TOP" prefHeight="60.0" prefWidth="150.0" text="Launch" textFill="#444444">
+         <font>
+            <Font size="15.5" />
+         </font>
+      </SplitMenuButton>
+   </children>
+</AnchorPane>
