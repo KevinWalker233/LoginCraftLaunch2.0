@@ -1,0 +1,176 @@
+.root {
+    -fx-font-family: "微软雅黑";
+    -fx-font-size: 16px;
+    -fx-background-size: stretch stretch;
+    -fx-background-color: transparent;
+    -fx-background-position: center center;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+}
+
+.scroll-bar {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(205, 205, 205, 0.7);;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(166, 166, 166, 0.9);;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-padding: 4px 2px;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .increment-button:hover,
+.scroll-bar .decrement-button:hover {
+    -fx-background-color: #dadada;
+}
+
+.scroll-bar .increment-button:pressed,
+.scroll-bar .decrement-button:pressed {
+    -fx-background-color: #7b7b7b;
+}
+
+.scroll-pane.increment-button:hover, .scroll-pane .decrement-button:hover {
+    -fx-background-color: derive(gray, 0%);
+}
+
+.scroll-pane {
+    -fx-background-color: rgba(255, 255, 255, 0);
+    -fx-background: rgba(255, 255, 255, 0)
+}
+
+.button {
+    -fx-padding: 3.0 12.0 3.0 12.0;
+    -fx-background-color: rgba(68, 68, 68, 0);
+    -fx-font-family: "微软雅黑";
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-border-width: 2;
+    -fx-border-color: rgba(68, 68, 68, 1);
+    -fx-background-insets: 0.0 0.0 0.0 0.0, 0.0, 1.0, 2.0;
+}
+
+.button:hover {
+    -fx-background-color: rgba(68, 68, 68, 0.22);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(68, 68, 68, 0.6), 5, 0.0, 0, 1);
+}
+
+.button:pressed, .button:default:hover:pressed, #imageview:pressed {
+    -fx-background-color: rgba(150, 150, 150, 0.5);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-border-color: rgba(68, 68, 68, 1);
+    -fx-border-width: 1.0;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-scale-z: 0.98;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: #e2e2e2;
+    -fx-border-color: #778899;
+    -fx-border-width: 2.0;
+}
+
+.text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: rgba(68, 68, 68, 1);
+    -fx-border-style: solid;
+    -fx-border-width: 0px 0px 2px 0px;
+    -fx-border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0);
+}
+
+.combo-box {
+    -fx-background-color: rgba(68, 68, 68, 0);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-border-width: 2;
+    -fx-border-color: rgba(68, 68, 68, 1);
+}
+
+.list-cell {
+    -fx-background-color: rgba(68, 68, 68, 0);
+    -fx-text-fill: rgba(68, 68, 68, 1);
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+}
+
+.list-view {
+    -fx-background-color: rgba(68, 68, 68, 0.2);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+}
+
+.list-view:hover {
+    -fx-background-color: rgba(68, 68, 68, 0.2);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+}
+
+.combo-box:hover {
+    -fx-background-color: rgba(68.0, 68.0, 68.0, 0.24);
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    /*-fx-scale-x: 1.03;*/
+    /*-fx-scale-y: 1.03;*/
+    /*-fx-scale-z: 1.03;*/
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
+}
+
+/* The main scrollbar **track** CSS class */
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 1em;
+}
+
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(86, 86, 86, 0.8);
+    -fx-background-insets: 0.5, 0, 0;
+    -fx-background-radius: 1em;
+}

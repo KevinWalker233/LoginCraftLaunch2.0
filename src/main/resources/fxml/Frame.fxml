@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="base" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: rgba(0,0,0,0);" stylesheets="/css/MainUI.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.logincraftlaunch.ui.controller.FrameController">
+    <children>
+        <ImageView fx:id="mainBackground" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+            <effect>
+                <GaussianBlur radius="0.0" />
+            </effect>
+        </ImageView>
+        <Pane fx:id="pane" layoutX="200.0" layoutY="40.0" maxHeight="460.0" maxWidth="600.0" minHeight="460.0" minWidth="600.0" prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0);" stylesheets="/css/MainUI.css" />
+        <Line fx:id="l1" endX="200.0" endY="500.0" startX="200.0" />
+        <Line fx:id="l2" endX="800.0" endY="40.0" startX="200.0" startY="40.0" />
+        <Line fx:id="l3" endY="500.0" />
+        <Line fx:id="l4" endX="799.0" endY="500.0" startX="799.0" />
+        <Line fx:id="l5" endX="799.0" />
+        <Line fx:id="l6" endX="800.0" endY="499.0" startY="499.0" />
+      <Rectangle fx:id="rec" arcHeight="5.0" arcWidth="5.0" fill="#e5e5e547" height="40.0" layoutX="200.0" stroke="#e5e5e547" strokeType="INSIDE" width="600.0">
+         <effect>
+            <GaussianBlur />
+         </effect>
+      </Rectangle>
+      <Rectangle fx:id="rec1" arcHeight="5.0" arcWidth="5.0" fill="#e6e6e647" height="500.0" stroke="#e6e6e647" strokeType="INSIDE" width="200.0">
+         <effect>
+            <GaussianBlur radius="0.0" />
+         </effect>
+      </Rectangle>
+        <Pane fx:id="title" layoutX="200.0" maxHeight="40.0" maxWidth="600.0" minHeight="40.0" minWidth="600.0" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0);">
+            <children>
+                <Circle fill="#cc0000" layoutX="575.0" layoutY="20.0" onMouseClicked="#onExit" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="button" />
+            <ImageView fx:id="logo" fitHeight="30.0" fitWidth="30.0" layoutX="165.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+                <Text fx:id="titleText" fill="#383838" layoutX="200.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LoginCraftLaunch2.0" textAlignment="CENTER" y="2.5">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <rotationAxis>
+                        <Point3D />
+                    </rotationAxis>
+                </Text>
+            </children>
+        </Pane>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutY="175.0" maxHeight="325.0" maxWidth="200.0" minHeight="325.0" minWidth="200.0" prefHeight="325.0" prefWidth="200.0" vbarPolicy="NEVER">
+            <content>
+                <AnchorPane fx:id="apane" maxHeight="325.0" maxWidth="198.0" minHeight="325.0" minWidth="198.0" prefHeight="325.0" prefWidth="198.0">
+                    <children>
+                        <VBox fx:id="vertical" maxHeight="175.0" maxWidth="200.0" minHeight="175.0" minWidth="200.0" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+        <AnchorPane maxHeight="175.0" maxWidth="200.0" minHeight="175.0" minWidth="200.0" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: rgba(0,0,0,0);">
+            <children>
+                <ImageView fx:id="avatar" fitHeight="100.0" fitWidth="100.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../css/images/LCL.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="username" alignment="CENTER" ellipsisString="0" text="用户名" textAlignment="CENTER" textFill="#383838" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="130.0">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <Pane fx:id="hover" focusTraversable="true" maxHeight="500.0" maxWidth="800.0" minHeight="500.0" minWidth="800.0" mouseTransparent="true" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: rgba(0,0,0,0);" />
+    </children>
+    <effect>
+        <DropShadow />
+    </effect>
+</Pane>
