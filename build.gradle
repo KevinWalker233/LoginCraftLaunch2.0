@@ -30,6 +30,7 @@ allprojects {
 
 shadowJar {
     taskActions.removeIf { it.actionClassName.contains 'configureShadowTask' }
+    minimize()
 }
 
 dependencies {
