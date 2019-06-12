@@ -1,7 +1,10 @@
 package me.logincraftlaunch.apis;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import lombok.var;
 import me.logincraftlaunch.utils.FileUtil;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.*;
@@ -29,10 +32,11 @@ public class LclLocale {
     /**
      * 载入/重载 语言文件
      */
+    @SneakyThrows
     public void load() {
-        File langFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang");
-        File zhLangFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang/zh.json");
-        File enLangFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang/en.json");
+        var langFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang");
+        var zhLangFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang/zh.json");
+        var enLangFile = new File(FileUtil.getBaseDir(), "/LcLConfig/lang/en.json");
 
         if (!langFile.exists()) langFile.mkdir();
 
@@ -46,38 +50,15 @@ public class LclLocale {
 
         if (!langs.contains(String.valueOf(LclConfig.instance.lclConfigMap.get("lang"))))
             LclConfig.instance.lclConfigMap.put("lang", "zh");
-        JSONObject configJson = new JSONObject(Objects.requireNonNull(FileUtil.toString(new File(FileUtil.getBaseDir(), "/LcLConfig/lang/" + String.valueOf(LclConfig.instance.lclConfigMap.get("lang")) + ".json"), "utf-8")));
-        Iterator<?> iterator = configJson.keys();
+        var objectMapper = new ObjectMapper();
+        var configJson = objectMapper.readTree(new File(FileUtil.getBaseDir(), "/LcLConfig/lang/" + String.valueOf(LclConfig.instance.lclConfigMap.get("lang") + ".json")));
+        var iterator = configJson.fieldNames();
         String key;
         String value;
         while (iterator.hasNext()) {
-            key = (String) iterator.next();
-            value = configJson.getString(key);
+            key = iterator.next();
+            value = configJson.get(key).asText();
             lclLocaleMap.put(key, value);
         }
-    }
-
-
-    public static void main(String[] args) {
-        //载入配置文件
-        LclConfig lclConfig = new LclConfig();
-        //载入语言文件
-        LclLocale lclLocale = new LclLocale();
-        //测试输出语言文件
-        for (String value : lclLocale.lclLocaleMap.keySet()) {
-            System.out.println("内容：" + value + " 值：" + lclLocale.lclLocaleMap.get(value));
-        }
-
-        //修改已经存在的配置文件
-        LclConfig.instance.lclConfigMap.put("lang", "en");
-        //重载更改配置后的语言文件
-        lclLocale.load();
-        //测试输出语言文件
-        for (String value : lclLocale.lclLocaleMap.keySet()) {
-            System.out.println("内容：" + value + " 值：" + lclLocale.lclLocaleMap.get(value));
-        }
-
-        //保存更改后的配置文件
-        lclConfig.save();
     }
 }

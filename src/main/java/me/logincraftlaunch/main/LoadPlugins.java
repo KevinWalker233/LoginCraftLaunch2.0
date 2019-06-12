@@ -1,9 +1,9 @@
 package me.logincraftlaunch.main;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.logincraftlaunch.apis.LclPlugin;
 import me.logincraftlaunch.utils.FileUtil;
-import net.lingala.zip4j.io.ZipInputStream;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +32,9 @@ public class LoadPlugins {
                         catch (IOException e) {
                             e.printStackTrace();
                         }
-                        JSONObject configJson = new JSONObject(new String(b).trim());
-                        LclPlugin lclPlugin = getInstance(value, configJson.getString("mainClass"));
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        JsonNode configJson = objectMapper.readTree(new String(b).trim());
+                        LclPlugin lclPlugin = getInstance(value, configJson.get("mainClass").asText());
                         lclPlugin.loadPlugin();
                     }
                     catch (IOException e) {

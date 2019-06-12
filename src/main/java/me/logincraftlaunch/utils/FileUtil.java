@@ -1,9 +1,7 @@
 package me.logincraftlaunch.utils;
 
+import lombok.SneakyThrows;
 import me.logincraftlaunch.main.Main;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.io.ZipInputStream;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -12,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 public class FileUtil {
 
@@ -26,8 +25,7 @@ public class FileUtil {
             data = new byte[in.available()];
             in.read(data);
             in.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         //对字节数组Base64编码
@@ -54,8 +52,7 @@ public class FileUtil {
             out.flush();
             out.close();
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -66,8 +63,7 @@ public class FileUtil {
                     .decode(Main.class.getProtectionDomain().getCodeSource().getLocation().toString(), "utf-8")
                     .substring(6));
             return file.getParentFile();
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return null;
         }
     }
@@ -90,14 +86,11 @@ public class FileUtil {
             }
             in.close();
             out.close();
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
-        catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return out.toByteArray();
@@ -120,8 +113,7 @@ public class FileUtil {
             }
             in.close();
             out.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -138,8 +130,7 @@ public class FileUtil {
         if (!file.isDirectory()) {
             System.out.println(file.getAbsolutePath());
             result.add(file.getAbsolutePath());
-        }
-        else {
+        } else {
             File[] directoryList = file.listFiles(file1 -> file1.isFile() && file1.getName().endsWith(type));
             for (File aDirectoryList : directoryList) {
                 result.add(aDirectoryList.getName().substring(0, aDirectoryList.getName().length() - type.length() - 1));
@@ -221,18 +212,14 @@ public class FileUtil {
     /**
      * 获取压缩文件流
      *
-     * @param source 文件目录
+     * @param source   文件目录
      * @param fileName 文件名
      * @return
      */
-    public static ZipInputStream getInputStream(File source, String fileName) {
-        try {
-            ZipFile zipFile = new ZipFile(source);
-            return zipFile.getInputStream(zipFile.getFileHeader(fileName));
-        } catch (ZipException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @SneakyThrows
+    public static InputStream getInputStream(File source, String fileName) {
+        ZipFile zipFile = new ZipFile(source);
+        return zipFile.getInputStream(zipFile.getEntry(fileName));
     }
 
     public static String toString(File file, String charset) {

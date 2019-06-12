@@ -78,8 +78,7 @@ public class FrameController implements Initializable {
             Main.mainGui.getStage().setX(event.getScreenX() - xOffset);
             if (event.getScreenY() - yOffset < 0) {
                 Main.mainGui.getStage().setY(0);
-            }
-            else {
+            } else {
                 Main.mainGui.getStage().setY(event.getScreenY() - yOffset);
             }
         });
@@ -106,8 +105,7 @@ public class FrameController implements Initializable {
             );
             InterfaceManager.addInterface(Container.create(fxml, button));
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -121,8 +119,7 @@ public class FrameController implements Initializable {
             imageView.setFitHeight(30);
             imageView.setFitWidth(30);
             button = new Button(buttonName, imageView);
-        }
-        else button = new Button(buttonName);
+        } else button = new Button(buttonName);
         button.setAlignment(Pos.BASELINE_LEFT);
         button.setPrefSize(200, 45);
         button.setStyle("-fx-border-style: solid;" +

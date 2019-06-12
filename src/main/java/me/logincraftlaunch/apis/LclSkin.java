@@ -1,10 +1,12 @@
 package me.logincraftlaunch.apis;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.image.Image;
+import lombok.Getter;
+import lombok.var;
 import me.logincraftlaunch.utils.ColorTranslated;
 import me.logincraftlaunch.utils.FileUtil;
-import net.lingala.zip4j.io.ZipInputStream;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.*;
@@ -14,11 +16,11 @@ public class LclSkin {
 
     public static LclSkin instance;
 
-    private java.awt.Color awtMainColor = null;
-    private java.awt.Color awtTitleColor = null;
-    private java.awt.Color awtLineColor = null;
-    private double opacity = 1;
-    private Image background = null;
+    @Getter private java.awt.Color awtMainColor = null;
+    @Getter private java.awt.Color awtTitleColor = null;
+    @Getter private java.awt.Color awtLineColor = null;
+    @Getter private double opacity = 1;
+    @Getter private Image background = null;
 
 
     public LclSkin() {
@@ -31,52 +33,31 @@ public class LclSkin {
      */
     public void load() {
 
-        File folder = new File(FileUtil.getBaseDir(), "/LcLConfig/skin");
+        var folder = new File(FileUtil.getBaseDir(), "/LcLConfig/skin");
         if (!folder.exists()) folder.mkdir();
         if (folder.listFiles() == null || Objects.requireNonNull(folder.listFiles()).length == 0) {
             FileUtil.saveResource("default.zip", new File(folder, "default.zip"));
         }
 
-        try (ZipInputStream skinInputStream = FileUtil.getInputStream(new File(FileUtil.getBaseDir(), String.valueOf(LclConfig.instance.lclConfigMap.get("skin"))), "skin.json")) {
+        try (InputStream skinInputStream = FileUtil.getInputStream(new File(FileUtil.getBaseDir(), String.valueOf(LclConfig.instance.lclConfigMap.get("skin"))), "skin.json")) {
             assert skinInputStream != null;
-            Reader reader = new InputStreamReader(skinInputStream, "utf-8");
-            JSONObject skin = new JSONObject(readerToString((InputStreamReader) reader).trim());
-            awtMainColor = ColorTranslated.toColorFromString(skin.getString("colorMain"));
-            awtLineColor = ColorTranslated.toColorFromString(skin.getString("colorLine"));
-            awtTitleColor = ColorTranslated.toColorFromString(skin.getString("colorTitle"));
-            opacity = skin.getDouble("opacity");
-        }
-        catch (Exception e) {
+            var reader = new InputStreamReader(skinInputStream, "utf-8");
+            var objectMapper = new ObjectMapper();
+            var skin = objectMapper.readTree(readerToString((InputStreamReader) reader).trim());
+            awtMainColor = ColorTranslated.toColorFromString(skin.get("colorMain").asText());
+            awtLineColor = ColorTranslated.toColorFromString(skin.get("colorLine").asText());
+            awtTitleColor = ColorTranslated.toColorFromString(skin.get("colorTitle").asText());
+            opacity = skin.get("opacity").asDouble();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try (ZipInputStream skinInputStream = FileUtil.getInputStream(new File(FileUtil.getBaseDir(), String.valueOf(LclConfig.instance.lclConfigMap.get("skin"))), "Background.png")) {
+        try (InputStream skinInputStream = FileUtil.getInputStream(new File(FileUtil.getBaseDir(), String.valueOf(LclConfig.instance.lclConfigMap.get("skin"))), "Background.png")) {
             assert skinInputStream != null;
             background = new Image(skinInputStream);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public Image getBackground() {
-        return background;
-    }
-
-    public Color getAwtMainColor() {
-        return awtMainColor;
-    }
-
-    public Color getAwtTitleColor() {
-        return awtTitleColor;
-    }
-
-    public Color getAwtLineColor() {
-        return awtLineColor;
-    }
-
-    public double getOpacity() {
-        return opacity;
     }
 
     private String readerToString(InputStreamReader reader) throws IOException {
@@ -89,8 +70,7 @@ public class LclSkin {
         String value = buffer.toString();
         if (buffer.toString().startsWith("\uFEFF")) {
             value = buffer.toString().replace("\uFEFF", "");
-        }
-        else if (buffer.toString().endsWith("\uFEFF")) {
+        } else if (buffer.toString().endsWith("\uFEFF")) {
             value = buffer.toString().replace("\uFEFF", "");
         }
         reader.close();

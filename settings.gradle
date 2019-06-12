@@ -1,4 +1,5 @@
 rootProject.name = 'logincraftlaunch'
 include 'lcl-mcdownloader'
 include 'lcl-api'
+include 'lcl-launch'
 

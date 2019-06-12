@@ -5,7 +5,6 @@ import me.logincraftlaunch.downloader.provider.ApiProvider;
 
 @RequiredArgsConstructor
 public class MinecraftVersion {
-
     private final ApiProvider provider;
 
 }
