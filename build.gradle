@@ -1,11 +1,10 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '4.0.4' apply false
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'logincraftlaunch'
     version '1.0-SNAPSHOT'
@@ -26,15 +25,15 @@ allprojects {
         options.encoding = 'UTF-8'
     }
 
-    shadowJar {
-        taskActions.removeIf { it.actionClassName.contains 'configureShadowTask' }
-    }
+}
 
+shadowJar {
+    taskActions.removeIf { it.actionClassName.contains 'configureShadowTask' }
 }
 
 dependencies {
     compile subprojects
 }
 
-defaultTasks 'build'
+defaultTasks 'clean', 'build', 'shadowJar'
 
