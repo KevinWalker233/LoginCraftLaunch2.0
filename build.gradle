@@ -9,7 +9,7 @@ allprojects {
     group 'logincraftlaunch'
     version '1.0-SNAPSHOT'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = targetCompatibility =  1.8
 
     repositories {
         mavenCentral()

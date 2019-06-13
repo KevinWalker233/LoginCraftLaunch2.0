@@ -29,12 +29,12 @@ public class DownloadPartialFileTask extends DownloadTask<Path> {
 
     @Override
     protected Path compute() throws Exception {
-        if (!Files.exists(fileInfo.getFile())) {
-            Files.createFile(fileInfo.getFile());
-        }
+        createFile(fileInfo.getFile());
         val url = new URL(option.getProvider().mapUrl(fileInfo.getUrl()));
         val conn = ((HttpURLConnection) url.openConnection());
         conn.setRequestProperty("Range", "bytes=" + done + "-");
+        conn.setReadTimeout(option.getTimeout());
+        conn.setConnectTimeout(option.getTimeout());
         val len = conn.getContentLengthLong();
         val in = Channels.newChannel(conn.getInputStream());
         val raf = new RandomAccessFile(fileInfo.getFile().toFile(), "rw");
@@ -42,6 +42,14 @@ public class DownloadPartialFileTask extends DownloadTask<Path> {
         underlying = ReadWriteTask.of(in, out, len);
         getPool().submit(this, underlying).get();
         return fileInfo.getFile();
+    }
+
+    private void createFile(Path file) throws Exception {
+        if (!Files.exists(file)) {
+            val parent = file.getParent();
+            if (!Files.exists(parent)) Files.createDirectories(parent);
+            Files.createFile(file);
+        }
     }
 
 }

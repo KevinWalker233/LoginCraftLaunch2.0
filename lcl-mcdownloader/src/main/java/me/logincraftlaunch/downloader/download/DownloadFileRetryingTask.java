@@ -48,7 +48,7 @@ public class DownloadFileRetryingTask extends DownloadTask<Path> {
             } catch (ExecutionException e) {
                 // todo localized
                 System.err.println("Download " + fileInfo.getUrl() + " failed: " + unwrap(e).getLocalizedMessage());
-                done += task.underlying.done;
+                done += task.underlying == null ? 0 : task.underlying.done;
                 child().clear();
             }
             retry++;

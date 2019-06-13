@@ -1,6 +1,5 @@
 package me.logincraftlaunch.downloader;
 
-import lombok.SneakyThrows;
 import lombok.val;
 import me.logincraftlaunch.downloader.data.MinecraftVersion;
 import me.logincraftlaunch.downloader.download.DownloadMinecraftTask;
@@ -35,21 +34,26 @@ public class MinecraftDownloader {
         pool.shutdown();
     }
 
-    @SneakyThrows
     public static void main(String[] args) {
-        val downloader = new MinecraftDownloader(DownloaderOption.builder()
-                .poolSize(32)
-                .checkOption(DownloaderOption.CheckOptions.CHECK_HASH)
-                .maxRetry(3)
-                .platform("windows")
-                .provider(new BmclapiProvider())
-                .separateVersion(false)
-                .skipAssets(false)
-                .rootDir(new File("C:/Users/csh20/Desktop/新建文件夹/.minecraft").toPath())
-                .build());
-        val versions = downloader.getVersionList().get();
-        downloader.downloadMinecraft(versions.get(0)).get();
-        downloader.shutdown();
+        try {
+            val downloader = new MinecraftDownloader(DownloaderOption.builder()
+                    .poolSize(32)
+                    .checkOption(DownloaderOption.CheckOptions.CHECK_HASH)
+                    .maxRetry(3)
+                    .timeout(7000)
+                    .platform("windows")
+                    .arch("64")
+                    .provider(new BmclapiProvider())
+                    .separateVersion(false)
+                    .skipAssets(false)
+                    .rootDir(new File("C:/Users/csh20/Desktop/新建文件夹/.minecraft").toPath())
+                    .build());
+            val versions = downloader.getVersionList().get();
+            downloader.downloadMinecraft(versions.get(130)).get();
+            downloader.shutdown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

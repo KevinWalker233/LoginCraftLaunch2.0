@@ -20,16 +20,15 @@ public abstract class DownloadTask<T> implements Callable<T> {
 
     public final T call() throws Exception {
         synchronized (this) {
-            if (state != TaskState.PENDING) throw new IllegalStateException();
-            else state = TaskState.RUNNING;
+            if (state != TaskState.PENDING) {
+                throw new IllegalStateException();
+            } else state = TaskState.RUNNING;
         }
         T t = null;
         try {
             t = compute();
-            if (state == TaskState.RUNNING) {
-                if (t == null) state = TaskState.FAIL;
-                else state = TaskState.SUCCESS;
-            }
+            if (t == null) state = TaskState.FAIL;
+            else state = TaskState.SUCCESS;
         } catch (Throwable e) {
             state = TaskState.FAIL;
             throw e;

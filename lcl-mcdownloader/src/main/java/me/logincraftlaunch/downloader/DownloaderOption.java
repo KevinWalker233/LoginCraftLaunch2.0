@@ -16,6 +16,8 @@ public class DownloaderOption {
 
     private final int maxRetry;
 
+    private final int timeout;
+
     private final Path rootDir;
 
     private final boolean separateVersion;
@@ -28,6 +30,11 @@ public class DownloaderOption {
      * should be windows / osx / linux
      */
     private final String platform;
+
+    /**
+     * should be 32 / 64
+     */
+    private final String arch;
 
     public enum CheckOptions {
         CHECK_SIZE, CHECK_HASH

@@ -30,9 +30,7 @@ public class DownloadMinecraftTask extends DownloadTask<MinecraftVersion> {
         if (!Files.isDirectory(versionDir)) Files.createDirectories(versionDir);
         val task = DownloadJsonTask.of(option, version.getUrl());
         val node = getPool().submit(this, task).get();
-        System.out.println(1);
         if (!option.isSkipAssets()) {
-            System.out.println(2);
             val index = node.get("assetIndex");
             val assetsIndexTask = DownloadAssetsIndexTask.of(option, version,
                     FileInfo.from(index, root.resolve("assets/indexes/" + index.get("id").asText() + ".json")));

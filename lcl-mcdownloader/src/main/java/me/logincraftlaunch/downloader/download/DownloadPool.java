@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 public class DownloadPool extends ThreadPoolExecutor {
 
     public DownloadPool(int maxSize) {
-        super(1, maxSize, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
+        super(Math.max(maxSize, 3), Math.max(maxSize, 3), 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(),
                 new ThreadFactoryBuilder().setNameFormat("lcl-mcdownloader-%d").build());
     }
 
@@ -19,6 +19,9 @@ public class DownloadPool extends ThreadPoolExecutor {
     }
 
     public <T> Future<T> submitNoCheck(Callable<T> task) {
+        if (task instanceof DownloadTask) {
+            ((DownloadTask<T>) task).setPool(this);
+        }
         return super.submit(task);
     }
 
@@ -41,6 +44,7 @@ public class DownloadPool extends ThreadPoolExecutor {
             } catch (Exception t) {
                 Future<T> future = Futures.immediateFailedCheckedFuture(t);
                 System.out.println("Task " + ((DownloadTask<T>) task).name() + " end with exception=" + t.toString() + " . STATE: " + ((DownloadTask<T>) task).state());
+                t.printStackTrace();
                 return future;
             }
         } else return super.submit(task);
@@ -70,13 +74,11 @@ public class DownloadPool extends ThreadPoolExecutor {
             if (t == null) {
                 System.out.println("Task " + ((DownloadFutureTask) r).getTask().name() +
                         " end. STATE: " + ((DownloadFutureTask) r).getTask().state());
-                ((DownloadFutureTask<?>) r).getTask().child()
-                        .stream()
-                        .filter(it -> it.state() == TaskState.PENDING)
-                        .forEach(this::submit);
-            } else
+            } else {
                 System.out.println("Task " + ((DownloadFutureTask) r).getTask().name() +
                         " end with exception=" + t.toString() + ". STATE: " + ((DownloadFutureTask) r).getTask().state());
+                t.printStackTrace();
+            }
         }
     }
 
