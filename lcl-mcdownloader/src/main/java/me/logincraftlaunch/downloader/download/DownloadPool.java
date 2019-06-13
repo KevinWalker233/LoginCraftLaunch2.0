@@ -8,9 +8,23 @@ import java.util.concurrent.*;
 
 public class DownloadPool extends ThreadPoolExecutor {
 
-    public DownloadPool() {
-        super(1, 32, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
+    public DownloadPool(int maxSize) {
+        super(1, maxSize, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(),
                 new ThreadFactoryBuilder().setNameFormat("lcl-mcdownloader-%d").build());
+    }
+
+    public <T> Future<T> submitNoCheck(DownloadTask<?> parent, DownloadTask<T> child) {
+        parent.child().add(child);
+        return submitNoCheck(child);
+    }
+
+    public <T> Future<T> submitNoCheck(Callable<T> task) {
+        return super.submit(task);
+    }
+
+    public <T> Future<T> submit(DownloadTask<?> parent, DownloadTask<T> child) {
+        parent.child().add(child);
+        return submit(child);
     }
 
     @Override
@@ -26,7 +40,7 @@ public class DownloadPool extends ThreadPoolExecutor {
                 return future;
             } catch (Exception t) {
                 Future<T> future = Futures.immediateFailedCheckedFuture(t);
-                System.out.println("Task " + ((DownloadTask<T>) task).name() + " end with exception. STATE: " + ((DownloadTask<T>) task).state());
+                System.out.println("Task " + ((DownloadTask<T>) task).name() + " end with exception=" + t.toString() + " . STATE: " + ((DownloadTask<T>) task).state());
                 return future;
             }
         } else return super.submit(task);
@@ -49,18 +63,32 @@ public class DownloadPool extends ThreadPoolExecutor {
     @Override
     protected void afterExecute(Runnable r, Throwable t) {
         if (r instanceof DownloadFutureTask) {
-            if (t == null)
+            if (((DownloadFutureTask) r).getTask().state() == TaskState.SUCCESS) {
+                ((DownloadFutureTask<?>) r).getTask().getThen().forEach(it -> submitNoCheck(((DownloadFutureTask) r).getTask(), it));
+            }
+            if (t == null) t = ((DownloadFutureTask) r).getException();
+            if (t == null) {
                 System.out.println("Task " + ((DownloadFutureTask) r).getTask().name() +
                         " end. STATE: " + ((DownloadFutureTask) r).getTask().state());
-            else
+                ((DownloadFutureTask<?>) r).getTask().child()
+                        .stream()
+                        .filter(it -> it.state() == TaskState.PENDING)
+                        .forEach(this::submit);
+            } else
                 System.out.println("Task " + ((DownloadFutureTask) r).getTask().name() +
-                        " end with exception. STATE: " + ((DownloadFutureTask) r).getTask().state());
+                        " end with exception=" + t.toString() + ". STATE: " + ((DownloadFutureTask) r).getTask().state());
         }
+    }
+
+    public static <T> DownloadTask<T> fromFuture(Future<T> future) {
+        if (future instanceof DownloadFutureTask) return ((DownloadFutureTask<T>) future).getTask();
+        else throw new ClassCastException(future.getClass() + " not a mcdownloader class.");
     }
 
     private static class DownloadFutureTask<V> extends FutureTask<V> {
 
         private final DownloadTask<V> task;
+        private Throwable t;
 
         public DownloadFutureTask(DownloadTask<V> callable) {
             super(callable);
@@ -69,6 +97,16 @@ public class DownloadPool extends ThreadPoolExecutor {
 
         public DownloadTask<V> getTask() {
             return task;
+        }
+
+        @Override
+        protected void setException(Throwable t) {
+            super.setException(t);
+            this.t = t;
+        }
+
+        public Throwable getException() {
+            return t;
         }
 
     }

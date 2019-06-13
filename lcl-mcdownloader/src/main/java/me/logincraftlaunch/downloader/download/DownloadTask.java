@@ -2,7 +2,9 @@ package me.logincraftlaunch.downloader.download;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -14,13 +16,20 @@ public abstract class DownloadTask<T> implements Callable<T> {
 
     private final Set<DownloadTask> child = new HashSet<>(1);
 
+    @Getter private final List<DownloadTask<?>> then = new ArrayList<>(0);
+
     public final T call() throws Exception {
+        synchronized (this) {
+            if (state != TaskState.PENDING) throw new IllegalStateException();
+            else state = TaskState.RUNNING;
+        }
         T t = null;
         try {
-            state = TaskState.RUNNING;
             t = compute();
-            if (t == null) state = TaskState.FAIL;
-            else state = TaskState.SUCCESS;
+            if (state == TaskState.RUNNING) {
+                if (t == null) state = TaskState.FAIL;
+                else state = TaskState.SUCCESS;
+            }
         } catch (Throwable e) {
             state = TaskState.FAIL;
             throw e;
@@ -50,6 +59,11 @@ public abstract class DownloadTask<T> implements Callable<T> {
 
     public Set<DownloadTask> child() {
         return child;
+    }
+
+    public DownloadTask<T> then(DownloadTask<?> then) {
+        this.then.add(then);
+        return this;
     }
 
     public boolean isDone() {

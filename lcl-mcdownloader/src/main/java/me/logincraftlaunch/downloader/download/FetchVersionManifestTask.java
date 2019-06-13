@@ -7,15 +7,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import me.logincraftlaunch.api.Api;
+import me.logincraftlaunch.downloader.DownloaderOption;
 import me.logincraftlaunch.downloader.data.MinecraftVersion;
-import me.logincraftlaunch.downloader.provider.ApiProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor(staticName = "of")
 public class FetchVersionManifestTask extends DownloadTask<List<MinecraftVersion>> {
-    private final ApiProvider provider;
+
+    private final DownloaderOption option;
 
     @Override
     public String name() {
@@ -24,9 +25,8 @@ public class FetchVersionManifestTask extends DownloadTask<List<MinecraftVersion
 
     @Override
     protected List<MinecraftVersion> compute() throws Exception {
-        val task = DownloadJsonTask.of(provider.versionManifestUrl());
-        child().add(task);
-        val node = getPool().submit(task).get();
+        val task = DownloadJsonTask.of(option, option.getProvider().versionManifestUrl());
+        val node = getPool().submit(this, task).get();
         return Streams.stream(node.get("versions").elements()).map(new Function<JsonNode, MinecraftVersion>() {
             @SneakyThrows
             public MinecraftVersion apply(JsonNode input) {
